@@ -1,7 +1,7 @@
 README.md
 pyproject.toml
 app/config/__init__.py
-app/config/constant.py
+app/config/constants.py
 app/config/settings.py
 app/rag/__init__.py
 app/services/__init__.py

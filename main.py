@@ -1,39 +1,38 @@
-# this code scrape data from url
-import requests
-from bs4 import BeautifulSoup
-import time
+"""
+FastAPI application entry point.
+"""
 
-# fetch the page
-url = "https://www.intrepidtravel.com/en/vietnam"
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.routes import router
+from app.config.settings import settings
+from app.utils.logger import setup_logging
 
-headers = {
-    "User-Agent": "RAGTravelBot/1.0"
-}
+setup_logging()  # Call before creating the app
 
-response = requests.get(url, headers=headers)
-print(f"Status: {response.status_code}")    # 200 = success
-print(f"Content length: {len(response.text)} characters")
-# print(response.text)
+app = FastAPI(
+    title="Tourism RAG Chatbot",
+    description="AI-powered travel consultant using RAG with local LLM",
+    version="0.1.0"
+)
 
-# # parse with BeautifulSoup
-soup = BeautifulSoup(response.text, "lxml")
-# print(soup)
+# CORS - allows frontend to call this api
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Restrict this in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Step 3: Find all links that look like tour detail pages
-# Tour URLs follow pattern: /en/[country]/[tour-slug]-[id]
-all_links = soup.find_all("a", href=True)
-print("All Link:", len(all_links))
-tour_links = []
+app.include_router(router, prefix="/api")
 
-for link in all_links:
-    href = link["href"]
-    print("href:", href)
-    if "/en/" in href and href.count("/") >= 3 and href != url:
-        # Likely a tour detail link
-        if any(dest in href for dest in ["/vietnam/", "/cambodia/", "/thailand/"]):
-            if href not in tour_links:
-                tour_links.append(href)
-
-print(f"\nFound {len(tour_links)} potential tour links:")
-for link in tour_links[:25]:
-    print(f"{link}")
+if __name__ == "__main__":
+    import uvicorn
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host=settings.api_host,
+        port=settings.api_port,
+        reload=True  # Auto-reload on code changes during development
+    )

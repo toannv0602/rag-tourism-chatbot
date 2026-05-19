@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     Each field maps to an env variable by name (case-insensitive).
     """
     # Paths
+    log_dir: Path = PROJECT_ROOT / "logs"
     data_dir: Path = PROJECT_ROOT / "data"
     vector_store_dir: Path = PROJECT_ROOT / "vector_store"
 

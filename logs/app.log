@@ -1,0 +1,24 @@
+2026-05-20 01:01:53 | INFO | watchfiles.main | 2 changes detected
+2026-05-20 01:02:12 | INFO | watchfiles.main | 4 changes detected
+2026-05-20 01:03:21 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:24 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:27 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:28 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:30 | INFO | app.api.routes | [API][/CHAT] question: Nói cho tôi về lịch trình của tour Vietnam Express Southbound
+2026-05-20 01:03:30 | INFO | app.api.routes | [API][/CHAT] Intent of question: itinerary
+2026-05-20 01:03:30 | INFO | app.api.routes | [API][/CHAT] question: None
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.3677]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.3706]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.3816]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4063]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4130]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4136]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4175]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4331]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4418]
+2026-05-20 01:03:30 | INFO | app.api.routes |   Source: Vietnam Express Southbound (itinerary_day) [distance: 0.4426]
+2026-05-20 01:03:42 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:44 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:47 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:03:49 | INFO | watchfiles.main | 1 change detected
+2026-05-20 01:04:17 | INFO | watchfiles.main | 1 change detected

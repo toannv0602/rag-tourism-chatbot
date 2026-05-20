@@ -3,6 +3,7 @@ The RAG chain: retriever -> prompt builder  -> LLM -> response
 """
 
 import requests
+import json
 from app.config.settings import settings
 from app.rag.retriever import Retriever
 from app.rag.prompt_templates import SYSTEM_PROMPT, RAG_PROMPT_TEMPLATE
@@ -87,7 +88,11 @@ class RAGChain:
         for i, chunk in enumerate(chunk, 1):
             meta = chunk["metadata"]
             header = f"[Source {i}: {meta.get('tour_name', 'Unknown')} - {meta.get('type', '')}]"
-            context_parts.append(f"{header}\n{chunk['content']}")
+            lines = [header, chunk['content']]
+            url = meta.get("source_url", "")
+            if url:
+                lines.append(f"URL: {url}")
+            context_parts.append("\n".join(lines))
 
         return "\n\n".join(context_parts)
     
@@ -107,12 +112,13 @@ class RAGChain:
                         {"role":"user", "content": user_prompt}
                     ],
                     "stream": False,
+                    "think": False,
                     "options": {
-                        "temperature": 0.3, # Low = more factual, less creative
-                        "num_ctx": 4096     # Context window size
+                        "temperature": 0.3,
+                        "num_ctx": 16384
                     }
                 },
-                timeout=60
+                timeout=120
             )
             response.raise_for_status()
             return response.json()["message"]["content"]
@@ -123,5 +129,66 @@ class RAGChain:
             return "[Error] LLM took too long to respond. Try a shorter question."
         except Exception as e:
             return f"[ERROR] [CALL_OLLAMA]: {str(e)}"
-        
 
+    """
+    same as ask(), but yields tokens as they're generated
+    used for websocket streaming
+    """    
+    def ask_stream(self, question: str, top_k: int = DEFAULT_TOP_K):
+        # define question intent and get tour name
+        intent = self.classifier.classify(question)
+        tour_name = self.parser.extract_tour_name(question)
+        chunk_type = None
+        if intent == "itinerary":
+            chunk_type = ChunkType.ITINERARY_DAY
+            top_k = 10 # get top 10 results to void too long
+
+        chunks = self.retriever.search(
+            query=question,
+            top_k=top_k,
+            chunk_type=chunk_type,
+            tour_name=tour_name,
+        )
+
+        context = self._format_context(chunks)
+        user_prompt = RAG_PROMPT_TEMPLATE.format(
+            context=context,
+            question=question
+        )
+
+        # Stream from Ollama
+        yield from self._call_ollama_stream(user_prompt)
+
+    """Call Ollama with streaming enabled, yield each token."""
+    def _call_ollama_stream(self, user_prompt: str):
+        try:
+            response = requests.post(
+                f"{settings.ollama_base_url}/api/chat",
+                json={
+                    "model": settings.llm_model,
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    "stream": True,
+                    "think": False,
+                    "options": {
+                        "temperature": 0.3,
+                        "num_ctx": 16384
+                    }
+                },
+                stream=True,
+                timeout=(10, None),
+            )
+            response.raise_for_status()
+
+            for line in response.iter_lines():
+                if line:
+                    data = json.loads(line)
+                    token = data.get("message", {}).get("content", "")
+                    if token:
+                        yield token
+                    if data.get("done", False):
+                        break
+        except Exception as e:
+            yield f"[ERROR] [_CALL_OLLAMA_STREAM]: {str(e)}"

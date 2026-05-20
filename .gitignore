@@ -3,3 +3,5 @@ data/raw/
 vector_store/
 __pycache__/
 *.pyc
+logs/app.log
+/ui/node_modules

@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
     # LLM
     ollama_base_url: str = "http://localhost:11434"
-    llm_model: str = "qwen3:8b"
+    llm_model: str = "llama3.2:3b"
 
     # Embeddings
     embedding_model: str = "BAAI/bge-m3"

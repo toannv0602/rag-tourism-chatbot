@@ -35,6 +35,7 @@ def chat(request: ChatRequest):
 @router.websocket("/ws/chat")
 async def chat_stream(websocket: WebSocket):
     await websocket.accept()
+    
     try:
         while True:
             data = await websocket.receive_text()

@@ -4,6 +4,18 @@ An AI-powered travel consultant chatbot for **Intrepid Travel** Asia tours. Cust
 
 ---
 
+## Architecture
+
+![Architecture](docs/architecture-chatbot.png)
+
+## Demo
+
+![Demo-1](docs/demo-1.jpg)
+***Demo 1: chatbot supports multiple language***
+
+![Demo-2](docs/demo-2.jpg)
+***Demo 2: chatbot supports multiple language***
+
 ## How It Works
 
 ```
@@ -19,7 +31,7 @@ QueryParser ──────── substring match ─────────
 Retriever ────────── ChromaDB semantic search + filters ► top-k chunks
      │                  (type, tour name, price, style)
      ▼
-RAGChain ─────────── format context + build prompt ─────► Ollama (Qwen3:8b)
+RAGChain ─────────── format context + build prompt ─────► Ollama (llama3.2:3b)
      │
      ▼
 FastAPI ──────────── WebSocket stream / HTTP POST ──────► React UI
@@ -27,11 +39,27 @@ FastAPI ──────────── WebSocket stream / HTTP POST ──
 
 ---
 
+## Features
+
+- Semantic retrieval using BGE-M3 embeddings
+
+- Metadata-aware chunk filtering
+
+- Streaming chat responses via WebSocket
+
+- Embedding-based intent classification
+
+- Local LLM inference with Ollama
+
+- Modular ETL pipeline for indexing tourism data
+
+- React frontend with real-time chat UI
+
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| LLM | [Qwen3:8b](https://ollama.com/library/qwen3) via [Ollama](https://ollama.com) (local, no cloud) |
+| LLM | [llama3.2:3b](https://ollama.com/library/llama3.2) via Ollama (https://ollama.com) (local, no cloud) |
 | Embeddings | `BAAI/bge-m3` via `sentence-transformers` |
 | Vector store | ChromaDB (persistent, cosine similarity) |
 | API | FastAPI + Uvicorn |
@@ -45,7 +73,7 @@ FastAPI ──────────── WebSocket stream / HTTP POST ──
 ```
 rag-tourism-chatbot/
 ├── main.py                     # FastAPI app entry point
-├── requirement.txt
+├── requirements.txt
 ├── pyproject.toml
 │
 ├── app/
@@ -99,7 +127,7 @@ rag-tourism-chatbot/
 
 Pull the LLM model once:
 ```bash
-ollama pull qwen3:8b
+ollama pull llama3.2:3b
 ```
 
 ---
@@ -118,7 +146,7 @@ source .venv/bin/activate        # macOS / Linux
 ### 2. Install Python dependencies
 
 ```bash
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 > **Note on PyTorch:** `sentence-transformers` installs PyTorch automatically. If you want GPU/MPS acceleration, install the appropriate torch variant first — see [pytorch.org/get-started](https://pytorch.org/get-started/locally/).
@@ -134,7 +162,7 @@ cp .env.example .env
 | Variable | Default | Description |
 |---|---|---|
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL |
-| `LLM_MODEL` | `qwen3:8b` | Ollama model name |
+| `LLM_MODEL` | `llama3.2:3b` | Ollama model name |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | HuggingFace embedding model |
 | `CHROMA_COLLECTION` | `tourism_data` | ChromaDB collection name |
 | `API_HOST` | `0.0.0.0` | API bind address |

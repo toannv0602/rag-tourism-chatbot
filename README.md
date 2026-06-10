@@ -4,10 +4,6 @@ An AI-powered travel consultant chatbot for **Intrepid Travel** Asia tours. Cust
 
 ---
 
-## Architecture
-
-![Architecture](docs/architecture-chatbot.png)
-
 ## Demo
 
 ![Demo-1](docs/demo-1.jpg)
@@ -15,6 +11,10 @@ An AI-powered travel consultant chatbot for **Intrepid Travel** Asia tours. Cust
 
 ![Demo-2](docs/demo-2.jpg)
 ***Demo 2: chatbot supports multiple language***
+
+## Architecture
+
+![Architecture](docs/architecture-chatbot.png)
 
 ## How It Works
 
